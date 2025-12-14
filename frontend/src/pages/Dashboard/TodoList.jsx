@@ -100,7 +100,7 @@ const TodoList = () => {
                         <i className="bi bi-tags"></i>
                         <span>Etiquetas</span>
                     </button>
-                    <button className="nav-item">
+                    <button className="nav-item" onClick={() => navigate('/templates')}>
                         <i className="bi bi-file-earmark-text"></i>
                         <span>Plantillas</span>
                     </button>
@@ -112,7 +112,7 @@ const TodoList = () => {
                         <i className="bi bi-clock-history"></i>
                         <span>Actividad</span>
                     </button>
-                    <button className="nav-item">
+                    <button className="nav-item" onClick={() => navigate('/trash')}>
                         <i className="bi bi-trash"></i>
                         <span>Papelera</span>
                     </button>

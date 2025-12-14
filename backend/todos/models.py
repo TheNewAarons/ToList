@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Project(models.Model):
     name = models.CharField(max_length=100)
@@ -29,14 +30,30 @@ class Task(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
+    updated_at = models.DateTimeField(auto_now=True)
     due_date = models.DateTimeField(null=True, blank=True)
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='tasks')
     is_important = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag, blank=True, related_name='tasks')
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
+
+    def hard_delete(self):
+        super(Task, self).delete()
+
+    def restore(self):
+        self.is_deleted = False
+        self.deleted_at = None
+        self.save()
 
     def __str__(self):
         return self.title
@@ -78,3 +95,23 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} {self.action} {self.target_type}: {self.target_name}"
+
+class Template(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    category = models.CharField(max_length=50, default='General') # e.g., 'Desarrollo', 'Diseño', 'Marketing'
+    priority = models.CharField(max_length=10, choices=Task.PRIORITY_CHOICES, default='medium')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='templates')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+class TemplateItem(models.Model):
+    template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name='items')
+    content = models.CharField(max_length=200)
+    is_completed = models.BooleanField(default=False) # In case we want to show it as checkable in preview
+
+    def __str__(self):
+        return self.content

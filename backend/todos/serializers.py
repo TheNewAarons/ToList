@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, Project, Tag, Subtask, Comment, ActivityLog
+from .models import Task, Project, Tag, Subtask, Comment, ActivityLog, Template, TemplateItem
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,3 +52,33 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = '__all__'
         read_only_fields = ('user',)
+
+class TemplateItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TemplateItem
+        fields = ['id', 'content', 'is_completed']
+
+class TemplateSerializer(serializers.ModelSerializer):
+    items = TemplateItemSerializer(many=True, required=False) # Nested items
+
+    class Meta:
+        model = Template
+        fields = '__all__'
+        read_only_fields = ('user',)
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('items', [])
+        template = Template.objects.create(**validated_data)
+        for item_data in items_data:
+            TemplateItem.objects.create(template=template, **item_data)
+        return template
+
+    def update(self, instance, validated_data):
+        items_data = validated_data.pop('items', None)
+        instance = super().update(instance, validated_data)
+        
+        if items_data is not None:
+            instance.items.all().delete() # Simple replacement strategy for now
+            for item_data in items_data:
+                TemplateItem.objects.create(template=instance, **item_data)
+        return instance

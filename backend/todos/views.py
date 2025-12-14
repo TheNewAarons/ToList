@@ -1,9 +1,10 @@
-from rest_framework import viewsets, permissions
-from .models import Task, Project, Comment, Tag, ActivityLog, Subtask
-from .serializers import TaskSerializer, ProjectSerializer, CommentSerializer, TagSerializer, ActivityLogSerializer, SubtaskSerializer
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import Task, Project, Tag, Subtask, ActivityLog, Comment, Template, TemplateItem
+from .serializers import TaskSerializer, ProjectSerializer, TagSerializer, SubtaskSerializer, ActivityLogSerializer, CommentSerializer, TemplateSerializer
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.db.models import Count, F
 from django.db.models.functions import TruncDate, ExtractWeekDay
 from django.utils import timezone
@@ -178,6 +179,81 @@ class TagViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+class TaskViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user, is_deleted=False)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def trash(self, request):
+        trash_tasks = Task.objects.filter(user=request.user, is_deleted=True).order_by('-deleted_at')
+        serializer = self.get_serializer(trash_tasks, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def restore(self, request, pk=None):
+        try:
+            task = Task.objects.get(pk=pk, user=request.user, is_deleted=True)
+            task.restore()
+            return Response({'status': 'task restored'}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found in trash'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['delete'])
+    def delete_forever(self, request, pk=None):
+        try:
+            task = Task.objects.get(pk=pk, user=request.user, is_deleted=True)
+            task.hard_delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found in trash'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['delete'])
+    def empty_trash(self, request):
+        Task.objects.filter(user=request.user, is_deleted=True).delete() # This might call custom delete or standard delete depending on manager.
+        # Standard queryset delete() typically bypasses model.delete() method.
+        # But we want HARD delete here.
+        # To hard delete all locally:
+        tasks = Task.objects.filter(user=request.user, is_deleted=True)
+        for task in tasks:
+            task.hard_delete()
+        return Response({'status': 'trash emptied'}, status=status.HTTP_200_OK)
+
+    def perform_destroy(self, instance):
+        instance.delete() # Calls our custom soft delete method
+
+    @action(detail=False, methods=['post'])
+    def bulk_restore(self, request):
+        task_ids = request.data.get('task_ids', [])
+        if not task_ids:
+            return Response({'error': 'No task IDs provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        tasks = Task.objects.filter(id__in=task_ids, user=request.user, is_deleted=True)
+        count = tasks.count()
+        for task in tasks:
+            task.restore()
+            
+        return Response({'status': f'{count} tasks restored'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post']) # using post for bulk delete trigger to avoid body issues in some clients with delete method
+    def bulk_delete_forever(self, request):
+        task_ids = request.data.get('task_ids', [])
+        if not task_ids:
+            return Response({'error': 'No task IDs provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        tasks = Task.objects.filter(id__in=task_ids, user=request.user, is_deleted=True)
+        count = tasks.count()
+        for task in tasks:
+            task.hard_delete()
+            
+        return Response({'status': f'{count} tasks permanently deleted'}, status=status.HTTP_200_OK)
+
+
 class SubtaskViewSet(viewsets.ModelViewSet):
     serializer_class = SubtaskSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -191,12 +267,40 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class TaskViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return self.request.user.tasks.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class TemplateViewSet(viewsets.ModelViewSet):
+    serializer_class = TemplateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Template.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @action(detail=True, methods=['post'])
+    def use(self, request, pk=None):
+        template = self.get_object()
+        # Logic to create a task from template
+        # For now, frontend can handle this by reading template data and POSTing to /tasks/
+        # But providing an endpoint is also good practice.
+        # Let's implement basic copy logic here for robust "Use" button
+        
+        task_data = {
+            'title': template.title,
+            'description': template.description,
+            'priority': template.priority,
+            # category logic depends on project/tags, skipping for MVP simple copy
+        }
+        
+        task = Task.objects.create(user=request.user, **task_data)
+        
+        # Copy items as subtasks
+        for item in template.items.all():
+            Subtask.objects.create(task=task, title=item.content, completed=False)
+            
+        return Response({'status': 'task created from template', 'task_id': task.id}, status=status.HTTP_201_CREATED)

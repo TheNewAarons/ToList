@@ -12,9 +12,11 @@ import Settings from './pages/Settings/Settings';
 import Activity from './pages/Activity/Activity';
 import Tags from './pages/Tags/Tags';
 import Today from './pages/Today/Today';
+import Trash from './pages/Trash/Trash';
 import Statistics from './pages/Statistics/Statistics';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditTodo from './pages/Tasks/EditTodo';
+import Templates from './pages/Templates/Templates';
 import './App.css';
 
 function App() {
@@ -112,6 +114,14 @@ function App() {
           }
         />
         <Route
+          path="/trash"
+          element={
+            <ProtectedRoute>
+              <Trash />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/statistics"
           element={
             <ProtectedRoute>
@@ -119,7 +129,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route
+          path="/templates"
+          element={
+            <ProtectedRoute>
+              <Templates />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );

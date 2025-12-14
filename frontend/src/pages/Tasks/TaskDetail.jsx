@@ -319,7 +319,7 @@ const TaskDetail = () => {
                         <i className="bi bi-clock-history"></i>
                         <span>Actividad</span>
                     </button>
-                    <button className="nav-item">
+                    <button className="nav-item" onClick={() => navigate('/trash')}>
                         <i className="bi bi-trash"></i>
                         <span>Papelera</span>
                     </button>

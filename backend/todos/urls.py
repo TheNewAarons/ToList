@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TaskViewSet, ProjectViewSet, TagViewSet, SubtaskViewSet, CommentViewSet, ActivityLogViewSet, StatisticsView
+from .views import TaskViewSet, ProjectViewSet, TagViewSet, SubtaskViewSet, CommentViewSet, ActivityLogViewSet, StatisticsView, TemplateViewSet
 
 router = DefaultRouter()
 router.register(r'tasks', TaskViewSet, basename='task')
@@ -9,6 +9,7 @@ router.register(r'tags', TagViewSet, basename='tag')
 router.register(r'subtasks', SubtaskViewSet, basename='subtask')
 router.register(r'comments', CommentViewSet, basename='comment')
 router.register(r'activity', ActivityLogViewSet, basename='activity')
+router.register(r'templates', TemplateViewSet, basename='template')
 
 urlpatterns = [
     path('', include(router.urls)),
