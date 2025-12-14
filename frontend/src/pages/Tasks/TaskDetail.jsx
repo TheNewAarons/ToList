@@ -163,31 +163,55 @@ const TaskDetail = () => {
     };
 
     // Tags Handlers
-    const handleAddTag = async (e) => {
-        e.preventDefault();
-        if (!newTag.trim()) return;
+    const [availableTags, setAvailableTags] = useState([]);
 
-        // Check if tag already exists in allTags
-        const existingTag = allTags.find(t => t.name.toLowerCase() === newTag.trim().toLowerCase());
-
-        if (existingTag) {
-            handleSelectTag(existingTag);
-        } else {
+    useEffect(() => {
+        const fetchTags = async () => {
             try {
-                // Create new tag
-                const tagResponse = await api.post('tags/', { name: newTag });
-                const newTagObj = tagResponse.data;
-                setAllTags([...allTags, newTagObj]);
+                const response = await api.get('tags/');
+                setAvailableTags(response.data);
+            } catch (error) {
+                console.error("Error fetching tags", error);
+            }
+        };
+        fetchTags();
+    }, []);
 
-                // Add to task
+    const handleAddTag = async (e) => {
+        if (e.key === 'Enter' && e.target.value.trim()) {
+            e.preventDefault();
+            const tagName = e.target.value.trim();
+
+            // Check if already assigned to task
+            if (task.tags.some(t => t.name.toLowerCase() === tagName.toLowerCase())) {
+                e.target.value = '';
+                return;
+            }
+
+            try {
+                let tagToAdd;
+
+                // Check if exists in available tags
+                const existingTag = availableTags.find(t => t.name.toLowerCase() === tagName.toLowerCase());
+
+                if (existingTag) {
+                    tagToAdd = existingTag;
+                } else {
+                    // Create new
+                    const response = await api.post('tags/', { name: tagName });
+                    tagToAdd = response.data;
+                    setAvailableTags([...availableTags, tagToAdd]);
+                }
+
                 const currentTagIds = task.tags.map(t => t.id);
-                await api.patch(`tasks/${id}/`, { tag_ids: [...currentTagIds, newTagObj.id] });
+                await api.patch(`tasks/${id}/`, {
+                    tag_ids: [...currentTagIds, tagToAdd.id]
+                });
 
-                setNewTag('');
-                setShowTagDropdown(false);
-                fetchTask();
-            } catch (err) {
-                console.error('Error adding tag:', err);
+                fetchTask(); // Refresh task
+                e.target.value = '';
+            } catch (error) {
+                console.error('Error adding tag:', error);
             }
         }
     };
@@ -274,6 +298,18 @@ const TaskDetail = () => {
                     <button className="nav-item" onClick={() => navigate('/important')}>
                         <i className="bi bi-star"></i>
                         <span>Importantes</span>
+                    </button>
+                    <button className="nav-item" onClick={() => navigate('/tags')}>
+                        <i className="bi bi-tags"></i>
+                        <span>Etiquetas</span>
+                    </button>
+                    <button className="nav-item" onClick={() => navigate('/statistics')}>
+                        <i className="bi bi-graph-up"></i>
+                        <span>Estadísticas</span>
+                    </button>
+                    <button className="nav-item" onClick={() => navigate('/activity')}>
+                        <i className="bi bi-activity"></i>
+                        <span>Actividad</span>
                     </button>
                     <button className="nav-item" onClick={() => navigate('/settings')}>
                         <i className="bi bi-gear"></i>
@@ -517,7 +553,12 @@ const TaskDetail = () => {
                             <div className="tags-list mb-3">
                                 {Array.isArray(task.tags) && task.tags.map(tag => (
                                     <div key={tag.id} className="tag-wrapper">
-                                        <span className="tag">{tag.name}</span>
+                                        <span className="tag" style={{
+                                            borderLeft: `5px solid ${tag.color || '#e2e8f0'}`,
+                                        }}>
+                                            {tag.icon && <i className={`bi ${tag.icon} me-1`} style={{ color: tag.color || '#64748b' }}></i>}
+                                            {tag.name}
+                                        </span>
                                         <button
                                             className="tag-menu-btn"
                                             onClick={() => setActiveTagMenuId(activeTagMenuId === tag.id ? null : tag.id)}
@@ -549,39 +590,52 @@ const TaskDetail = () => {
                                             setShowTagDropdown(true);
                                         }}
                                         onFocus={() => setShowTagDropdown(true)}
+                                        onBlur={() => setTimeout(() => setShowTagDropdown(false), 200)}
                                     />
                                     <button type="submit" className="btn btn-sm btn-outline-primary">
                                         <i className="bi bi-plus"></i>
                                     </button>
 
-                                    {showTagDropdown && newTag && (
+                                    {showTagDropdown && (
                                         <div className="tag-suggestions">
                                             {allTags
-                                                .filter(t => t.name.toLowerCase().includes(newTag.toLowerCase()))
+                                                .filter(t => !newTag || t.name.toLowerCase().includes(newTag.toLowerCase()))
                                                 .map(tag => (
                                                     <button
                                                         key={tag.id}
                                                         type="button"
                                                         className="tag-suggestion-item"
                                                         onClick={() => handleSelectTag(tag)}
+                                                        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                                                     >
+                                                        <span
+                                                            style={{
+                                                                width: '12px',
+                                                                height: '12px',
+                                                                borderRadius: '50%',
+                                                                backgroundColor: tag.color || '#ccc'
+                                                            }}
+                                                        ></span>
                                                         {tag.name}
                                                     </button>
                                                 ))
                                             }
-                                            {!allTags.some(t => t.name.toLowerCase() === newTag.toLowerCase()) && (
+                                            {newTag && !allTags.some(t => t.name.toLowerCase() === newTag.toLowerCase()) && (
                                                 <button type="submit" className="tag-suggestion-item create-new">
                                                     <i className="bi bi-plus"></i> Crear "{newTag}"
                                                 </button>
+                                            )}
+                                            {allTags.length === 0 && !newTag && (
+                                                <div className="p-2 text-muted small">No hay etiquetas creadas. Escribe para crear una.</div>
                                             )}
                                         </div>
                                     )}
                                 </div>
                             </form>
-                        </div>
+                        </div >
 
                         {/* Activity (Mocked for now as we don't have an activity log model yet) */}
-                        <div className="content-card">
+                        < div className="content-card" >
                             <h2><i className="bi bi-activity"></i> Actividad Reciente</h2>
                             <div className="activity-item">
                                 <div className="activity-dot"></div>
@@ -590,11 +644,11 @@ const TaskDetail = () => {
                                     <time>Ahora</time>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+                        </div >
+                    </div >
+                </div >
+            </main >
+        </div >
     );
 };
 

@@ -149,6 +149,10 @@ const Activity = () => {
                         <i className="bi bi-star"></i>
                         <span>Importantes</span>
                     </button>
+                    <button className="nav-item" onClick={() => navigate('/tags')}>
+                        <i className="bi bi-tags"></i>
+                        <span>Etiquetas</span>
+                    </button>
                     <button className="nav-item" onClick={() => navigate('/statistics')}>
                         <i className="bi bi-graph-up"></i>
                         <span>Estadísticas</span>

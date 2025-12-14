@@ -13,6 +13,8 @@ class Project(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
+    color = models.CharField(max_length=7, default='#667eea')
+    icon = models.CharField(max_length=50, default='bi-tag')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tags')
 
     def __str__(self):

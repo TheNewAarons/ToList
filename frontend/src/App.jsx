@@ -10,6 +10,7 @@ import Projects from './pages/Projects/Projects';
 import ImportantTasks from './pages/Important/ImportantTasks';
 import Settings from './pages/Settings/Settings';
 import Activity from './pages/Activity/Activity';
+import Tags from './pages/Tags/Tags';
 import Statistics from './pages/Statistics/Statistics';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditTodo from './pages/Tasks/EditTodo';
@@ -90,6 +91,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Activity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tags"
+          element={
+            <ProtectedRoute>
+              <Tags />
             </ProtectedRoute>
           }
         />
