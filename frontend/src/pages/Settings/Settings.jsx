@@ -3,10 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Settings.css';
 import logoImage from '../../img/logo-todolist.jpg';
+import api from '../../api';
 
 const Settings = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState({ username: 'Usuario' });
+    const [user, setUser] = useState({
+        username: '',
+        first_name: '',
+        last_name: '',
+        email: ''
+    });
 
     // Config State - Mocked for UI interactivity
     const [notifications, setNotifications] = useState({
@@ -30,12 +36,40 @@ const Settings = () => {
         archiveCompleted: false
     });
 
+    const [passwordData, setPasswordData] = useState({
+        old_password: '',
+        new_password: '',
+        confirm_password: ''
+    });
+
+    // Apply Theme & Dark Mode
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            // setUser(JSON.parse(storedUser));
-        }
+        document.body.className = ''; // Reset
+        document.body.classList.add(`theme-${theme}`);
+        if (darkMode) document.body.classList.add('dark-mode');
+    }, [theme, darkMode]);
+
+    useEffect(() => {
+        fetchUserProfile();
     }, []);
+
+    const handlePasswordChange = (key, value) => {
+        setPasswordData(prev => ({ ...prev, [key]: value }));
+    };
+
+    const fetchUserProfile = async () => {
+        try {
+            const response = await api.get('auth/profile/');
+            setUser(response.data);
+            localStorage.setItem('user', JSON.stringify(response.data));
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -48,6 +82,13 @@ const Settings = () => {
 
     const handlePreferenceChange = (key, value) => {
         setPreferences(prev => ({ ...prev, [key]: value }));
+    };
+
+    const getInitials = () => {
+        if (user.first_name && user.last_name) {
+            return `${user.first_name[0]}${user.last_name[0]}`.toUpperCase();
+        }
+        return user.username ? user.username.substring(0, 2).toUpperCase() : 'US';
     };
 
     return (
@@ -86,7 +127,7 @@ const Settings = () => {
                 </nav>
 
                 <div className="user-profile">
-                    <div className="user-avatar">JD</div>
+                    <div className="user-avatar">{getInitials()}</div>
                     <div className="user-info">
                         <h6>{user.username}</h6>
                         <small>Plan Pro</small>
@@ -125,7 +166,7 @@ const Settings = () => {
                         </div>
 
                         <div className="avatar-upload">
-                            <div className="avatar-preview">JD</div>
+                            <div className="avatar-preview">{getInitials()}</div>
                             <div className="avatar-actions">
                                 <button className="btn-upload">
                                     <i className="bi bi-upload"></i> Subir foto
@@ -138,20 +179,38 @@ const Settings = () => {
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Nombre</label>
-                                    <input type="text" className="form-control" defaultValue="Juan" placeholder="Tu nombre" />
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={user.first_name || ''}
+                                        onChange={(e) => setUser({ ...user, first_name: e.target.value })}
+                                        placeholder="Tu nombre"
+                                    />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Apellido</label>
-                                    <input type="text" className="form-control" defaultValue="Pérez" placeholder="Tu apellido" />
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={user.last_name || ''}
+                                        onChange={(e) => setUser({ ...user, last_name: e.target.value })}
+                                        placeholder="Tu apellido"
+                                    />
                                 </div>
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label>Correo electrónico</label>
-                            <input type="email" className="form-control" defaultValue="juan.perez@email.com" placeholder="tu@email.com" />
+                            <input
+                                type="email"
+                                className="form-control"
+                                value={user.email || ''}
+                                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                                placeholder="tu@email.com"
+                            />
                             <small className="form-text">Tu correo principal para notificaciones</small>
                         </div>
 
@@ -438,20 +497,20 @@ const Settings = () => {
 
                         <div className="form-group">
                             <label>Cambiar contraseña</label>
-                            <input type="password" class="form-control" placeholder="Contraseña actual" />
+                            <input type="password" className="form-control" placeholder="Contraseña actual" />
                         </div>
 
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Nueva contraseña</label>
-                                    <input type="password" class="form-control" placeholder="Nueva contraseña" />
+                                    <input type="password" className="form-control" placeholder="Nueva contraseña" />
                                 </div>
                             </div>
                             <div className="col-md-6">
                                 <div className="form-group">
                                     <label>Confirmar contraseña</label>
-                                    <input type="password" class="form-control" placeholder="Confirmar contraseña" />
+                                    <input type="password" className="form-control" placeholder="Confirmar contraseña" />
                                 </div>
                             </div>
                         </div>
