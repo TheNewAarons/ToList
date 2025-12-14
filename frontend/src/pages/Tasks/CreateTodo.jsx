@@ -19,6 +19,9 @@ const CreateTodo = () => {
         if (location.state?.projectId) {
             setProjectId(location.state.projectId);
         }
+        if (location.state?.initialDate) {
+            setDate(location.state.initialDate);
+        }
     }, [location.state]);
 
     const handleSubmit = async (e) => {

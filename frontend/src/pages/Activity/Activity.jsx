@@ -130,37 +130,50 @@ const Activity = () => {
                 </div>
                 <nav>
                     <button className="nav-item" onClick={() => navigate('/todos')}>
-                        <i className="bi bi-house"></i>
+                        <i className="bi bi-house-door"></i>
                         <span>Dashboard</span>
                     </button>
-                    <button className="nav-item" onClick={() => navigate('/my-tasks')}>
-                        <i className="bi bi-list-task"></i>
-                        <span>Mis Tareas</span>
-                    </button>
-                    <button className="nav-item" onClick={() => navigate('/calendar')}>
-                        <i className="bi bi-calendar3"></i>
-                        <span>Calendario</span>
-                    </button>
-                    <button className="nav-item" onClick={() => navigate('/projects')}>
-                        <i className="bi bi-folder"></i>
-                        <span>Proyectos</span>
+                    <button className="nav-item" onClick={() => navigate('/today')}>
+                        <i className="bi bi-calendar-day"></i>
+                        <span>Hoy</span>
                     </button>
                     <button className="nav-item" onClick={() => navigate('/important')}>
                         <i className="bi bi-star"></i>
                         <span>Importantes</span>
                     </button>
+                    <button className="nav-item" onClick={() => navigate('/my-tasks')}>
+                        <i className="bi bi-list-task"></i>
+                        <span>Mis Tareas</span>
+                    </button>
+                    <button className="nav-item" onClick={() => navigate('/projects')}>
+                        <i className="bi bi-folder"></i>
+                        <span>Proyectos</span>
+                    </button>
+                    <button className="nav-item" onClick={() => navigate('/calendar')}>
+                        <i className="bi bi-calendar3"></i>
+                        <span>Calendario</span>
+                    </button>
                     <button className="nav-item" onClick={() => navigate('/tags')}>
                         <i className="bi bi-tags"></i>
                         <span>Etiquetas</span>
+                    </button>
+                    <button className="nav-item">
+                        <i className="bi bi-file-earmark-text"></i>
+                        <span>Plantillas</span>
                     </button>
                     <button className="nav-item" onClick={() => navigate('/statistics')}>
                         <i className="bi bi-graph-up"></i>
                         <span>Estadísticas</span>
                     </button>
-                    <button className="nav-item active">
+                    <button className="nav-item active" onClick={() => navigate('/activity')}>
                         <i className="bi bi-clock-history"></i>
                         <span>Actividad</span>
                     </button>
+                    <button className="nav-item">
+                        <i className="bi bi-trash"></i>
+                        <span>Papelera</span>
+                    </button>
+                    <hr style={{ margin: '10px 20px', borderColor: '#e9ecef' }} />
                     <button className="nav-item" onClick={() => navigate('/settings')}>
                         <i className="bi bi-gear"></i>
                         <span>Configuración</span>

@@ -11,6 +11,7 @@ import ImportantTasks from './pages/Important/ImportantTasks';
 import Settings from './pages/Settings/Settings';
 import Activity from './pages/Activity/Activity';
 import Tags from './pages/Tags/Tags';
+import Today from './pages/Today/Today';
 import Statistics from './pages/Statistics/Statistics';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditTodo from './pages/Tasks/EditTodo';
@@ -91,6 +92,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Activity />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/today"
+          element={
+            <ProtectedRoute>
+              <Today />
             </ProtectedRoute>
           }
         />
