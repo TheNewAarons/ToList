@@ -14,8 +14,10 @@
    The user provided specific CSS for this page, so we will include it scoped mostly to the main content to avoid breaking global styles. */
 
 .activity-main-content {
-    margin-left: 250px;
-    padding: 30px;
+    margin-left: 280px;
+    /* Standard: 280px */
+    padding: 2rem 3rem;
+    max-width: 1400px;
 }
 
 .timeline {

@@ -143,6 +143,14 @@ const ImportantTasks = () => {
                         <span>Importantes</span>
                         <span className="nav-badge">{tasks.length}</span>
                     </button>
+                    <button className="nav-item" onClick={() => navigate('/statistics')}>
+                        <i className="bi bi-graph-up"></i>
+                        <span>Estadísticas</span>
+                    </button>
+                    <button className="nav-item" onClick={() => navigate('/activity')}>
+                        <i className="bi bi-clock-history"></i>
+                        <span>Actividad</span>
+                    </button>
                     <button className="nav-item" onClick={() => navigate('/settings')}>
                         <i className="bi bi-gear"></i>
                         <span>Configuración</span>
@@ -192,7 +200,7 @@ const ImportantTasks = () => {
                     </div>
                     <div className="stat-card">
                         <div className="stat-icon stat-icon-red">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
                         </div>
                         <div className="stat-info">
                             <h3>{stats.highPriority}</h3>

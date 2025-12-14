@@ -93,6 +93,10 @@ const TodoList = () => {
                         <i className="bi bi-star"></i>
                         <span>Importantes</span>
                     </button>
+                    <button className="nav-item" onClick={() => navigate('/statistics')}>
+                        <i className="bi bi-graph-up"></i>
+                        <span>Estadísticas</span>
+                    </button>
                     <button className="nav-item" onClick={() => navigate('/activity')}>
                         <i className="bi bi-clock-history"></i>
                         <span>Actividad</span>
