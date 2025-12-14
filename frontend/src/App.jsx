@@ -9,6 +9,7 @@ import Calendar from './pages/Calendar/Calendar';
 import Projects from './pages/Projects/Projects';
 import ImportantTasks from './pages/Important/ImportantTasks';
 import Settings from './pages/Settings/Settings';
+import Activity from './pages/Activity/Activity';
 import ProtectedRoute from './components/ProtectedRoute';
 import EditTodo from './pages/Tasks/EditTodo';
 import './App.css';
@@ -80,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/activity"
+          element={
+            <ProtectedRoute>
+              <Activity />
             </ProtectedRoute>
           }
         />

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, Project, Tag, Subtask, Comment
+from .models import Task, Project, Tag, Subtask, Comment, ActivityLog
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,6 +30,11 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = '__all__'
         read_only_fields = ('user',)
+
+class ActivityLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityLog
+        fields = '__all__'
 
 class TaskSerializer(serializers.ModelSerializer):
     project_id = serializers.PrimaryKeyRelatedField(

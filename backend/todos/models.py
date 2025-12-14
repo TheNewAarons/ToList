@@ -55,3 +55,24 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.task.title}"
+
+class ActivityLog(models.Model):
+    ACTION_CHOICES = [
+        ('CREATED', 'Created'),
+        ('COMPLETED', 'Completed'),
+        ('UPDATED', 'Updated'),
+        ('DELETED', 'Deleted'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities')
+    action = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    target_type = models.CharField(max_length=50) # 'Task', 'Project'
+    target_name = models.CharField(max_length=200)
+    details = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.user.username} {self.action} {self.target_type}: {self.target_name}"

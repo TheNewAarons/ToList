@@ -1,0 +1,140 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+}
+
+.activity-page {
+    background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+    min-height: 100vh;
+}
+
+/* Sidebar styling is handled by shared/existing styles, but we include specific overrides if needed from user request */
+/* Note: In this project, sidebars are often duplicated component-wise. We will trust the existing Project/Sidebar CSS or copy the structure.
+   The user provided specific CSS for this page, so we will include it scoped mostly to the main content to avoid breaking global styles. */
+
+.activity-main-content {
+    margin-left: 250px;
+    padding: 30px;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 50px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary-gradient);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -38px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-content {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+}
+
+.timeline-content:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 10px;
+}
+
+.activity-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.activity-time {
+    color: #6c757d;
+    font-size: 12px;
+}
+
+.activity-details {
+    color: #6c757d;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.activity-meta {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.date-separator {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    display: inline-block;
+    margin: 20px 0 20px 0;
+    font-weight: 600;
+    position: relative;
+    left: -30px;
+}
+
+.filter-bar {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+}
+
+.activity-type-created {
+    background: #28a745;
+}
+
+.activity-type-completed {
+    background: #667eea;
+}
+
+.activity-type-edited {
+    background: #ffc107;
+}
+
+.activity-type-deleted {
+    background: #dc3545;
+}
+
+.activity-type-comment {
+    background: #17a2b8;
+}
+
+.activity-type-assigned {
+    background: #764ba2;
+}

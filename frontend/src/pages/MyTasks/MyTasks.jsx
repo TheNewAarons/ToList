@@ -147,6 +147,10 @@ const MyTasks = () => {
                         <i className="bi bi-star"></i>
                         <span>Importantes</span>
                     </button>
+                    <button className="nav-item" onClick={() => navigate('/activity')}>
+                        <i className="bi bi-clock-history"></i>
+                        <span>Actividad</span>
+                    </button>
                     <button className="nav-item" onClick={() => navigate('/settings')}>
                         <i className="bi bi-gear"></i>
                         <span>Configuración</span>

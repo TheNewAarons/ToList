@@ -1,6 +1,13 @@
 from rest_framework import viewsets, permissions
-from .models import Task, Project, Tag, Subtask, Comment
-from .serializers import TaskSerializer, ProjectSerializer, TagSerializer, SubtaskSerializer, CommentSerializer
+from .models import Task, Project, Comment, Tag, ActivityLog, Subtask
+from .serializers import TaskSerializer, ProjectSerializer, CommentSerializer, TagSerializer, ActivityLogSerializer, SubtaskSerializer
+
+class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ActivityLogSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return ActivityLog.objects.filter(user=self.request.user)
 
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
