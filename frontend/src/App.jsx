@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
 import TodoList from './pages/Dashboard/TodoList';
 import CreateTodo from './pages/Tasks/CreateTodo';
 import MyTasks from './pages/MyTasks/MyTasks';
@@ -17,6 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/todos"
           element={

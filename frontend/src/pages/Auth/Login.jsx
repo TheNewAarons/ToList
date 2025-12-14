@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../../api';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Login.css';
@@ -107,7 +107,7 @@ const Login = () => {
                     </div>
 
                     <p className="text-center text-muted mt-4 mb-0">
-                        ¿No tienes cuenta? <a href="#">Regístrate</a>
+                        ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
                     </p>
                 </form>
             </div>
