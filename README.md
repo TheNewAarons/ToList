@@ -1,166 +1,166 @@
-# ToList Project - Full Stack Task Management System
+# Proyecto ToList - Sistema de Gestión de Tareas Full Stack
 
-**ToList** is a robust and modern task management application designed to help users organize their life and work efficiently. Built with a powerful **Django** backend and a dynamic **React** frontend, it offers a seamless user experience for managing tasks, projects, and schedules.
-
----
-
-## 🚀 Key Features & Modules
-
-The application is structured around several core modules that interact to provide a complete productivity ecosystem:
-
-### 1. Task Management (`tasks`)
-The core of the system.
-- **Create, Read, Update, Delete (CRUD)**: Full control over tasks.
-- **Priorities**: Assign Low, Medium, or High priority.
-- **Due Dates**: Set deadlines for your tasks.
-- **Important**: Mark crucial tasks for quick access.
-- **Status**: Track completion status.
-
-### 2. Project Organization (`projects`)
-Group related tasks into Projects (e.g., "Work", "Personal", "Shopping").
-- Each project can have its own color for easy visual identification.
-- Tasks can be assigned to specific projects.
-
-### 3. Smart Organization
-- **Tags**: Add flexible tags to tasks for cross-project filtering.
-- **My Tasks**: A unified view of all your responsibilities.
-- **Today**: Focus on what needs to be done today.
-- **Calendar**: A visual timeline of your upcoming tasks.
-- **Trash**: Soft-delete system allowing you to restore accidentally deleted items.
-
-### 4. Collaboration & Details
-- **Subtasks**: Break down complex tasks into smaller, manageable steps.
-- **Comments**: Add notes or updates to specific tasks.
-- **Activity Log**: Track the history of changes (creation, completion, updates) for audit and review.
-
-### 5. Templates (`templates`)
-Save time by creating reusable task lists for recurring workflows (e.g., "Packing List", "Project Kickoff").
-
-### 6. Analytics (`statistics`)
-Visual insights into your productivity, showing completion rates and activity trends.
+**ToList** es una aplicación de gestión de tareas robusta y moderna diseñada para ayudar a los usuarios a organizar su vida y trabajo de manera eficiente. Construida con un potente backend en **Django** y un frontend dinámico en **React**, ofrece una experiencia de usuario fluida para gestionar tareas, proyectos y horarios.
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Características y Módulos Clave
+
+La aplicación está estructurada en torno a varios módulos centrales que interactúan para proporcionar un ecosistema de productividad completo:
+
+### 1. Gestión de Tareas (`tasks`)
+El núcleo del sistema.
+- **Crear, Leer, Actualizar, Borrar (CRUD)**: Control total sobre las tareas.
+- **Prioridades**: Asigna prioridad Baja, Media o Alta.
+- **Fechas de Vencimiento**: Establece fechas límite para tus tareas.
+- **Importante**: Marca tareas cruciales para un acceso rápido.
+- **Estado**: Rastrea el estado de finalización.
+
+### 2. Organización de Proyectos (`projects`)
+Agrupa tareas relacionadas en Proyectos (ej. "Trabajo", "Personal", "Compras").
+- Cada proyecto puede tener su propio color para una fácil identificación visual.
+- Las tareas pueden asignarse a proyectos específicos.
+
+### 3. Organización Inteligente
+- **Etiquetas**: Añade etiquetas flexibles a las tareas para filtrado entre proyectos.
+- **Mis Tareas**: Una vista unificada de todas tus responsabilidades.
+- **Hoy**: Enfócate en lo que necesita hacerse hoy.
+- **Calendario**: Una línea de tiempo visual de tus tareas próximas.
+- **Papelera**: Sistema de borrado suave que te permite restaurar elementos eliminados accidentalmente.
+
+### 4. Colaboración y Detalles
+- **Subtareas**: Divide tareas complejas en pasos más pequeños y manejables.
+- **Comentarios**: Añade notas o actualizaciones a tareas específicas.
+- **Registro de Actividad**: Rastrea el historial de cambios (creación, finalización, actualizaciones) para auditoría y revisión.
+
+### 5. Plantillas (`templates`)
+Ahorra tiempo creando listas de tareas reutilizables para flujos de trabajo recurrentes (ej. "Lista de Empaque", "Inicio de Proyecto").
+
+### 6. Analíticas (`statistics`)
+Insights visuales sobre tu productividad, mostrando tasas de finalización y tendencias de actividad.
+
+---
+
+## 🛠 Tecnologías (Tech Stack)
 
 ### Backend
 - **Framework**: [Django](https://www.djangoproject.com/) (Python)
 - **API**: [Django REST Framework](https://www.django-rest-framework.org/)
-- **Database**: SQLite (Default) / Configurable for PostgreSQL
-- **Authentication**: Token-based authentication
+- **Base de Datos**: SQLite (Por defecto) / Configurable para PostgreSQL
+- **Autenticación**: Autenticación basada en Tokens
 
 ### Frontend
 - **Framework**: [React](https://react.dev/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Styling**: Bootstrap 5 & Custom CSS
-- **HTTP Client**: Axios
-- **Routing**: React Router DOM
+- **Herramienta de Construcción**: [Vite](https://vitejs.dev/)
+- **Estilos**: Bootstrap 5 y CSS Personalizado
+- **Cliente HTTP**: Axios
+- **Enrutamiento**: React Router DOM
 
 ---
 
-## 💻 Installation & Setup Guide
+## 💻 Guía de Instalación y Configuración
 
-Follow these steps to get the project running locally.
+Sigue estos pasos para ejecutar el proyecto localmente.
 
-### Prerequisites
-- **Node.js** (v16+ recommended)
-- **Python** (v3.8+ recommended)
+### Prerrequisitos
+- **Node.js** (v16+ recomendado)
+- **Python** (v3.8+ recomendado)
 - **Git**
 
-### 1. Clone the Repository
+### 1. Clonar el Repositorio
 ```bash
 git clone https://github.com/TheNewAarons/ToList.git
 cd ToList
 ```
 
-### 2. Backend Setup
-Navigate to the backend directory and set up the Python environment.
+### 2. Configuración del Backend
+Navega al directorio del backend y configura el entorno Python.
 
 ```bash
 cd backend
 
-# Create a virtual environment (Mac/Linux)
+# Crear un entorno virtual (Mac/Linux)
 python3 -m venv venv
 source venv/bin/activate
 
-# Create a virtual environment (Windows)
+# Crear un entorno virtual (Windows)
 # python -m venv venv
 # venv\Scripts\activate
 
-# Install dependencies
+# Instalar dependencias
 pip install -r requirements.txt
 
-# Run database migrations
+# Ejecutar migraciones de la base de datos
 python manage.py migrate
 
-# Start the development server
+# Iniciar el servidor de desarrollo
 python manage.py runserver
 ```
-*The backend API will be available at `http://127.0.0.1:8000/`*
+*La API del backend estará disponible en `http://127.0.0.1:8000/`*
 
-### 3. Frontend Setup
-Open a new terminal, navigate to the frontend directory, and launch the UI.
+### 3. Configuración del Frontend
+Abre una nueva terminal, navega al directorio frontend e inicia la interfaz de usuario.
 
 ```bash
 cd frontend
 
-# Install Node modules
+# Instalar módulos de Node
 npm install
 
-# Start the development server
+# Iniciar el servidor de desarrollo
 npm run dev
 ```
-*The application should now be running at `http://localhost:5173/` (or the port shown in your terminal)*
+*La aplicación debería estar corriendo ahora en `http://localhost:5173/` (o el puerto que se muestre en tu terminal)*
 
 ---
 
-## 🔌 API Reference
+## 🔌 Referencia de la API
 
-The backend exposes a comprehensive REST API. Here are the main endpoints:
+El backend expone una API REST completa. Aquí están los endpoints principales:
 
-| Endpoint | Method | Description |
+| Endpoint | Método | Descripción |
 |----------|--------|-------------|
-| `/api/auth/register/` | POST | Register a new user |
-| `/api/auth/login/` | POST | Login and receive auth token |
-| `/api/tasks/` | GET/POST | List all tasks or create a new one |
-| `/api/tasks/{id}/` | PUT/DELETE| Update or delete a task |
-| `/api/projects/` | GET/POST | Manage projects |
-| `/api/tags/` | GET/POST | Manage tags |
-| `/api/activity/` | GET | View user activity history |
-| `/api/statistics/` | GET | Get productivity stats |
-| `/api/templates/` | GET/POST | Manage task templates |
+| `/api/auth/register/` | POST | Registrar un nuevo usuario |
+| `/api/auth/login/` | POST | Iniciar sesión y recibir token de autenticación |
+| `/api/tasks/` | GET/POST | Listar todas las tareas o crear una nueva |
+| `/api/tasks/{id}/` | PUT/DELETE| Actualizar o eliminar una tarea |
+| `/api/projects/` | GET/POST | Gestionar proyectos |
+| `/api/tags/` | GET/POST | Gestionar etiquetas |
+| `/api/activity/` | GET | Ver historial de actividad del usuario |
+| `/api/statistics/` | GET | Obtener estadísticas de productividad |
+| `/api/templates/` | GET/POST | Gestionar plantillas de tareas |
 
 ---
 
-## 📂 Project Structure
+## 📂 Estructura del Proyecto
 
 ```
 ToList/
 ├── backend/            # Django Backend
-│   ├── accounts/       # User authentication app
-│   ├── todos/          # Main application logic (Tasks, Projects, etc.)
-│   ├── config/         # Project settings and URL routing
-│   ├── manage.py       # Django CLI entry point
+│   ├── accounts/       # App de autenticación de usuarios
+│   ├── todos/          # Lógica principal (Tareas, Proyectos, etc.)
+│   ├── config/         # Configuraciones del proyecto y rutas URL
+│   ├── manage.py       # Punto de entrada CLI de Django
 │   └── requirements.txt
 │
 └── frontend/           # React Frontend
-    ├── public/         # Static assets
+    ├── public/         # Archivos estáticos
     ├── src/
-    │   ├── components/ # Reusable UI components
-    │   ├── pages/      # Page views (TodoList, Login, Calendar, etc.)
-    │   ├── App.jsx     # Main React component
-    │   └── main.jsx    # Entry point
-    └── package.json    # Frontend dependencies
+    │   ├── components/ # Componentes UI reutilizables
+    │   ├── pages/      # Vistas de páginas (TodoList, Login, Calendar, etc.)
+    │   ├── App.jsx     # Componente principal de React
+    │   └── main.jsx    # Punto de entrada
+    └── package.json    # Dependencias del frontend
 ```
 
 ---
 
-## ✨ Usage Tips
+## ✨ Consejos de Uso
 
-1.  **Register** a new account on the first load.
-2.  **Create a Project** to categorize your work.
-3.  **Add Tasks** within projects or in the general "My Tasks" view.
-4.  **Check Statistics** to see how productive you've been!
+1.  **Regístrate** crea una nueva cuenta al cargar por primera vez.
+2.  **Crea un Proyecto** para categorizar tu trabajo.
+3.  **Añade Tareas** dentro de proyectos o en la vista general "Mis Tareas".
+4.  **Revisa las Estadísticas** ¡para ver qué tan productivo has sido!
 
 ---
-Developed by **TheNewAarons**
+Desarrollado por **TheNewAarons**
